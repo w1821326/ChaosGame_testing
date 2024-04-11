@@ -4,6 +4,8 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <cstdlib>
+#include <time.h>
 
 // Make code easier to type with "using namespace"
 using namespace sf;
@@ -18,6 +20,9 @@ int main()
 
     vector<Vector2f> vertices;
     vector<Vector2f> points;
+
+    srand(time(0));
+
 
 	while (window.isOpen())
 	{
@@ -64,12 +69,17 @@ int main()
 		****************************************
 		*/
 
-        if(points.size() > 0)
+        if(points.size() > 0 && points.size() < 100000)
         {
-            ///generate more point(s)
-            ///select random vertex
-            ///calculate midpoint between random vertex and the last point in the vector
-            ///push back the newly generated coord.
+            for (int i = 0; i < 100; i++) 
+            {
+                int vert = (rand() % (2 - 0 + 1));
+
+                Vector2f midpoint;
+                midpoint.x = (vertices[vert].x + points[points.size() - 1].x) / 2;
+                midpoint.y = (vertices[vert].y + points[points.size() - 1].y) / 2;
+                points.push_back(midpoint);
+            }
         }
 
         /*
@@ -83,6 +93,13 @@ int main()
             RectangleShape rect(Vector2f(10,10));
             rect.setPosition(Vector2f(vertices[i].x, vertices[i].y));
             rect.setFillColor(Color::Blue);
+            window.draw(rect);
+        }
+        for (int i = 0; i < points.size(); i++)
+        {
+            RectangleShape rect(Vector2f(1, 1));
+            rect.setPosition(Vector2f(points[i].x, points[i].y));
+            rect.setFillColor(Color::Yellow);
             window.draw(rect);
         }
         window.display();
